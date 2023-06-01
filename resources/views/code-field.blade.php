@@ -1,5 +1,6 @@
 <x-dynamic-component
     :component="$getFieldWrapperView()"
+    :field="$field"
     :id="$getId()"
     :label="$getLabel()"
     :label-sr-only="$isLabelHidden()"
@@ -12,14 +13,18 @@
     :state-path="$getStatePath()"
     :disabled="$isDisabled()"
 >
+    @php
+        $statePath = $getStatePath();
+    @endphp
     <style>
         :root {
             --minInputHeight: {{ $getMinHeight() }};
             --maxInputHeight: {{ $getMaxHeight() }};
         }
     </style>
-    <div x-data="filamentCodeField({
-        state: $wire.{{ $applyStateBindingModifiers('entangle(\''.$getStatePath().'\')') }},
+    <div
+        wire:model.defer="{{$statePath}}"
+        x-data="filamentCodeField({
         displayMode: {{ $displayMode ? 1 : 0 }},
         language: '{{ $language }}',
         disabled: {{ $isDisabled() ? 1 : 0 }},
